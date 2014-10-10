@@ -25,7 +25,6 @@ public class Game {
 		}
 		
 		Display.destroy();
-		System.exit(1);
 	}
 	
 	public static void main(String[] argv) {
