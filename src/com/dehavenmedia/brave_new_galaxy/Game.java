@@ -33,7 +33,7 @@ public class Game {
 	//update method
 	public void update() {
 		
-		while (!Display.isCloseRequested() || myGameState != GameState.ST_EXIT) {
+		while (!Display.isCloseRequested() && myGameState != GameState.ST_EXIT) {
 			myGameState.listen();
 			myGameState.step();	
 			myGameState.render();
