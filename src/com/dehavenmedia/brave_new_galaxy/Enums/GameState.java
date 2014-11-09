@@ -1,31 +1,62 @@
 package com.dehavenmedia.brave_new_galaxy.Enums;
 
-public enum GameState {
+public enum GameState implements State {
 	ST_COMPANY {
-		// State's logic goes here
+		@Override
+		public void step() {
+			// State's logic goes here
+		}
 	}, 
 	ST_TITLE {
-		// State's logic goes here
+		@Override
+		public void step() {
+			// State's logic goes here
+		}
 	}, 
 	ST_INTRO {
-		// State's logic goes here
+		@Override
+		public void step() {
+			// State's logic goes here
+		}
 	}, 
 	ST_MAINMENU {
-		// State's logic goes here
+		@Override
+		public void step() {
+			// State's logic goes here
+		}
 	}, 
 	ST_SETUP {
-		// State's logic goes here
+		@Override
+		public void step() {
+			// State's logic goes here
+		}
 	}, 
 	ST_LOAD {
-		// State's logic goes here
+		@Override
+		public void step() {
+			// State's logic goes here
+		}
 	}, 
 	ST_GAMEWORLD {
-		// State's logic goes here
+		@Override
+		public void step() {
+			// State's logic goes here
+		}
 	}, 
 	ST_EXIT {
-		// State's logic goes here
+		@Override
+		public void step() {
+			// State's logic goes here
+		}
 	}, 
 	ST_NULL {
-		// State's logic goes here
+		@Override
+		public void step() {
+			// State's logic goes here
+		}
 	};
+	
+	public void step() {
+		// Logic here
+	}
 }
