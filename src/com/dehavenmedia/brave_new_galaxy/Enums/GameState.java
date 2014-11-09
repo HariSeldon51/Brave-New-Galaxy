@@ -1,4 +1,4 @@
-package com.dehavenmedia.brave_new_galaxy;
+package com.dehavenmedia.brave_new_galaxy.Enums;
 
 public enum GameState {
 	ST_COMPANY {

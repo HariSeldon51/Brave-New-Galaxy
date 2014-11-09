@@ -4,6 +4,8 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
+import com.dehavenmedia.brave_new_galaxy.Enums.GameState;
+
 public class Game {
 	
 	GameState myGameState = GameState.ST_COMPANY; //The initial state the game starts out in
@@ -33,14 +35,14 @@ public class Game {
 		
 		while (!Display.isCloseRequested()) {
 			
-			// render OpenGL here
+			myGameState.step();
 			
 			Display.update();
 		}
 	}
 	
 	//end method
-	public void end () {
+	public void end() {
 		Display.destroy();
 		System.exit(1);
 	}
