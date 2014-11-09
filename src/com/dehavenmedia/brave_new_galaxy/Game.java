@@ -1,9 +1,14 @@
 package com.dehavenmedia.brave_new_galaxy;
 
+import java.io.IOException;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.opengl.Texture;
+import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.ResourceLoader;
 
 import com.dehavenmedia.brave_new_galaxy.Enums.GameState;
 
@@ -22,6 +27,7 @@ public class Game {
 	//start method
 	public void start() {
 		initGL(800, 600);
+		init();
 	}
 	
 	//update method
@@ -64,5 +70,14 @@ public class Game {
 		GL11.glLoadIdentity();
 		GL11.glOrtho(0, width, height, 0, 1, -1);
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
+	}
+	
+	private void init() {
+		Texture GameLogo;
+		try {
+			GameLogo = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/Brave New Galaxy Logo.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
