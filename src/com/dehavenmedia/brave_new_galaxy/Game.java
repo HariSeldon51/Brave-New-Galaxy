@@ -1,5 +1,6 @@
 package com.dehavenmedia.brave_new_galaxy;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import org.lwjgl.LWJGLException;
@@ -72,12 +73,18 @@ public class Game {
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 	}
 	
-	private void init() {
+	public void init() {
 		Texture GameLogo;
 		try {
 			GameLogo = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/Brave New Galaxy Logo.png"));
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+			Display.destroy();
+			System.exit(1);
 		} catch (IOException e) {
 			e.printStackTrace();
+			Display.destroy();
+			System.exit(1);
 		}
 	}
 }

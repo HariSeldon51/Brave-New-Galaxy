@@ -9,7 +9,7 @@ public enum GameState implements State {
 			// State's logic goes here
 		}
 		public void render() {
-			// State's drawing goes here
+			
 		}
 	}, 
 	ST_TITLE {
