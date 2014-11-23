@@ -9,13 +9,19 @@ import org.newdawn.slick.opengl.TextureLoader;
 import org.newdawn.slick.util.ResourceLoader;
 
 public class Graphic {
+	private Texture myImage;
+	private String PNGsource;
+	private int myWidth;
+	private int myHeight;	
 	
-	public Graphic(int width, int height, String Image) {
-		Texture thisImage;
-		String thisPNG = Image;
+	//Constructor: Loads the base image of the Graphic and couples it with width and height properties
+	public Graphic(int width, int height, String PNG) {
+		this.PNGsource = PNG;
+		this.myWidth = width;
+		this.myHeight = height;
 		
 		try {
-		thisImage = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/" + thisPNG));
+		myImage = TextureLoader.getTexture("PNG", ResourceLoader.getResourceAsStream("res/" + this.PNGsource));
 		} catch (FileNotFoundException e) {
 		e.printStackTrace();
 		Display.destroy();
@@ -25,6 +31,14 @@ public class Graphic {
 		Display.destroy();
 		System.exit(1);
 		}
+	}
+	
+	public int getWidth() {
+		return this.myWidth;
+	}
+	
+	public int getHeight() {
+		return this.myHeight;
 	}
 	
 	public void draw(int x, int y){
