@@ -1,6 +1,7 @@
 package com.dehavenmedia.brave_new_galaxy;
 
-public interface State {
+public interface State
+{
 	
 	default public void update()
 	{
@@ -12,4 +13,4 @@ public interface State {
 		// Render graphics buffer.
 	}
 
-}
+} // End of State interface.
