@@ -1,68 +1,33 @@
 package com.dehavenmedia.brave_new_galaxy;
 
-import org.lwjgl.LWJGLException;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.opengl.GL11;
-
-import com.dehavenmedia.brave_new_galaxy.Enums.GameState;
-
 public class Game {
 	
-	GameState myGameState = GameState.ST_COMPANY; //The initial state the game starts out in
+	GameState gameState = GameState.ST_LOAD; //The initial state the game starts out in
 	
-	//main method
-	public static void main(String[] argv) {
+	public static void main(String[] argv)
+	{
 		Game myGame = new Game();
-		myGame.start();
-		myGame.update();
+		myGame.init();
+		myGame.run();
 		myGame.end();
-	}
+	} // End of main().
 	
-	//start method
-	public void start() {
-		initGL(800, 600);
-	}
+	public void init()
+	{
+		// No members as of yet.
+	} // End of gameStart().
 	
-	//update method
-	public void update() {
-		
-		while (!Display.isCloseRequested() && myGameState != GameState.ST_EXIT) {
-			myGameState.listen();
-			myGameState.step();	
-			myGameState.render();
-			Display.update();
+	public void run()
+	{		
+		while (gameState != GameState.ST_EXIT) {
+			gameState.update();	
+			gameState.render();
 		}
-	}
+	} // End of gameLoop().
 	
-	//end method
-	public void end() {
-		Display.destroy();
+	public void end()
+	{
 		System.exit(1);
-	}
+	} // End of gameEnd().
 	
-	private void initGL(int width, int height) {
-		try {
-			Display.setDisplayMode(new DisplayMode(800,600));
-			Display.create();
-		} catch (LWJGLException e) {
-			e.printStackTrace();
-			System.exit(0);
-		}		
-		GL11.glEnable(GL11.GL_TEXTURE_2D);               
-        
-		GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);          
-        
-        // enable alpha blending
-       	GL11.glEnable(GL11.GL_BLEND);
-       	GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        
-       	GL11.glViewport(0,0,width,height);
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();
-		GL11.glOrtho(0, width, height, 0, 1, -1);
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-	}
-}
+} // End of Game class.
