@@ -7,12 +7,12 @@ public class GamePanel extends JPanel implements Runnable {
 	
 	GameStateManager gameStateManager;
 	Thread gameLoop;
-
-	public GamePanel(GameStateManager gm)
-	{
-		gameStateManager = gm;
-	}
 	
+	public GamePanel(GameStateManager gs)
+	{
+		gameStateManager = gs;
+	}
+
 	public void run()
 	{		
 		gameStateManager.startGame();

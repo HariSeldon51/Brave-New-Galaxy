@@ -13,8 +13,9 @@ public class GameFrame extends JFrame implements WindowListener
 	private static int DEFAULT_FPS = 80;
 	private static String TITLE = "Interstella - A Java Game Engine";
 	
-	private GameStateManager gameStateManager;
-	private GamePanel gamePanel;
+	public GameFrame gameFrame;
+	public GameStateManager gameStateManager;
+	public GamePanel gamePanel;
 	
 	DisplayMode displayMode = new DisplayMode(P_WIDTH, P_HEIGHT, 16, DEFAULT_FPS);
 		
