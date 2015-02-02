@@ -22,6 +22,7 @@ public class GameStateManager {
 	public GameStateManager(GameState gs)
 	{
 		gameState = gs;
+		gameState.instate();
 	}
 	
 	public void changeState(GameState gs)
@@ -31,14 +32,17 @@ public class GameStateManager {
 	
 	//  ------------   Game's gameloop methods   ------------ //
 	
-	public void loop()
+	public void update(double delta)
 	{
-		gameState.update();
-		gameState.render();
-		stateUpdate();
+		gameState.update(delta);
 	}
 	
-	private void stateUpdate()
+	public void render()
+	{
+		gameState.render();
+	}
+	
+	public void stateUpdate()
 	{
 		if (nextState != null) {
 			gameState.dispose();

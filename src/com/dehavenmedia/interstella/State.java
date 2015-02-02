@@ -6,7 +6,7 @@ public interface State
 		// Initialize state for upcoming use.
 	}
 	
-	default public void update() {
+	default public void update(double delta) {
 		// Listen for new events to act upon.
 	}
 	
