@@ -8,9 +8,9 @@ public class GamePanel extends JPanel implements Runnable {
 	GameStateManager gameStateManager;
 	Thread gameLoop;
 	
-	public GamePanel(GameStateManager gs)
+	public GamePanel()
 	{
-		gameStateManager = gs;
+		gameStateManager = new GameStateManager();
 	}
 
 	public void run()
@@ -18,8 +18,7 @@ public class GamePanel extends JPanel implements Runnable {
 		gameStateManager.startGame();
 		
 		while (gameStateManager.isRunning()) {
-			gameStateManager.update();	
-			gameStateManager.render();
+			gameStateManager.loop();	
 		}
 		
 		System.exit(0);

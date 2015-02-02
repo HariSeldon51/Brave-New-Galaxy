@@ -13,25 +13,19 @@ public class GameFrame extends JFrame implements WindowListener
 	private static int DEFAULT_FPS = 80;
 	private static String TITLE = "Interstella - A Java Game Engine";
 	
-	public GameFrame gameFrame;
-	public GameStateManager gameStateManager;
-	public GamePanel gamePanel;
+	//public GameFrame gameFrame;
+	public static GamePanel gamePanel;
 	
-	DisplayMode displayMode = new DisplayMode(P_WIDTH, P_HEIGHT, 16, DEFAULT_FPS);
-		
 	public GameFrame()
 	{
 		super(TITLE);
 		
-		gameStateManager = new GameStateManager();
-		gamePanel = new GamePanel(gameStateManager);
+		gamePanel = new GamePanel();
 		
 		makeGUI(gamePanel);
-		initWindow(this);
+		initWindow();
 		
 		setVisible(true);
-		setFocusable(true);
-		requestFocusInWindow();
 	} // End of BraveNewGalaxy() constructor.
 	
 	private void makeGUI(GamePanel gp)
@@ -41,11 +35,10 @@ public class GameFrame extends JFrame implements WindowListener
 		pack();
 	}
 	
-	private void initWindow(GameFrame gf)
+	private void initWindow()
 	{
-		GameFrame gameFrame = gf;
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		addWindowListener(gameFrame);		
+		addWindowListener(this);		
 		setLocationRelativeTo(null);
 	}
 	
@@ -54,13 +47,13 @@ public class GameFrame extends JFrame implements WindowListener
 	@Override
 	public void windowActivated(WindowEvent e)
 	{
-		gameStateManager.resumeGame();		
+		gamePanel.gameStateManager.resumeGame();		
 	}
 	
 	@Override
 	public void windowDeactivated(WindowEvent e)
 	{
-		gameStateManager.pauseGame();		
+		gamePanel.gameStateManager.pauseGame();		
 	}
 	
 	@Override
@@ -72,19 +65,19 @@ public class GameFrame extends JFrame implements WindowListener
 	@Override
 	public void windowIconified(WindowEvent e)
 	{
-		gameStateManager.pauseGame();		
+		gamePanel.gameStateManager.pauseGame();		
 	}
 	
 	@Override
 	public void windowDeiconified(WindowEvent e) 
 	{
-		gameStateManager.resumeGame();		
+		gamePanel.gameStateManager.resumeGame();		
 	}
 	
 	@Override
 	public void windowClosing(WindowEvent e)
 	{
-		gameStateManager.stopGame();		
+		gamePanel.gameStateManager.stopGame();		
 	}
 
 	// ------------  Main method  ------------ //
