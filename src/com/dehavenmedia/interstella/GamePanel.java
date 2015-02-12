@@ -2,10 +2,8 @@ package com.dehavenmedia.interstella;
 
 import javax.swing.*;
 
-import java.awt.*;
-import java.awt.event.*;
-
-public class GamePanel extends JPanel implements Runnable, WindowListener {
+public class GamePanel extends JPanel implements Runnable
+{
 	
 	GameStateManager gameStateManager;
 	Thread gameLoop;
@@ -15,10 +13,13 @@ public class GamePanel extends JPanel implements Runnable, WindowListener {
 	private static int DEFAULT_FPS = 80;
 	private static int MS_PER_FRAME = 1000/DEFAULT_FPS;
 	
-	long previousTime;
-	long currentTime;
-	long elapsedTime;
-	double lag = 0.0;
+	private volatile boolean isPaused = false; // Flag -- is the game currently paused?
+	private volatile boolean isRunning = false; // Flag -- is the game currently running?
+	
+	private long previousTime;
+	private long currentTime;
+	private long elapsedTime;
+	private double lag = 0.0;
 	
 	public GamePanel()
 	{
@@ -27,10 +28,10 @@ public class GamePanel extends JPanel implements Runnable, WindowListener {
 
 	public void run()
 	{		
-		gameStateManager.startGame();
+		isRunning = true;
 		
 		previousTime = getCurrTime();
-		while (gameStateManager.isRunning())
+		while (isRunning)
 		{
 			currentTime = getCurrTime();
 			elapsedTime = currentTime - previousTime;
@@ -56,55 +57,34 @@ public class GamePanel extends JPanel implements Runnable, WindowListener {
 		startGame();
 	}
 	
-	private void startGame()
-	{
-		if (gameLoop == null || !gameStateManager.isRunning()) {
-			gameLoop = new Thread(this);
-			gameLoop.start();
-		}
-	}
-	
 	private long getCurrTime()
 	{
 		return System.nanoTime();
 	}
 	
-	// ------------  Inherited methods from the WindowListener interface  ------------ //
+	// ------------  Game's life cycle methods  ------------ //
+	
+	public void startGame()
+	{
+		if (gameLoop == null || !isRunning) {
+			gameLoop = new Thread(this);
+			gameLoop.start();
+		}
+	} // End of startGame().
+	
+	public void pauseGame()
+	{
+		isPaused = true;
+	} // End of pauseGame().
+		
+	public void resumeGame()
+	{
+		isPaused = false;
+	} // End of resumeGame().
+		
+	public void stopGame()
+	{
+		isRunning = false;
+	} // End of stopGame().
 
-	@Override
-	public void windowActivated(WindowEvent e)
-	{
-		gameStateManager.resumeGame();		
-	}
-	
-	@Override
-	public void windowDeactivated(WindowEvent e)
-	{
-		gameStateManager.pauseGame();		
-	}
-	
-	@Override
-	public void windowOpened(WindowEvent e) {	}
-		
-	@Override
-	public void windowClosed(WindowEvent e) {	}
-
-	@Override
-	public void windowIconified(WindowEvent e)
-	{
-		gameStateManager.pauseGame();		
-	}
-		
-	@Override
-	public void windowDeiconified(WindowEvent e) 
-	{
-		gameStateManager.resumeGame();		
-	}
-		
-	@Override
-	public void windowClosing(WindowEvent e)
-	{
-		gameStateManager.stopGame();		
-	}
-	
 } // End of Game class.
