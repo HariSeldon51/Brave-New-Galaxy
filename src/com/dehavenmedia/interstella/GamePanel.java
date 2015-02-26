@@ -1,11 +1,15 @@
 package com.dehavenmedia.interstella;
 
+import java.awt.*;
+
 import javax.swing.*;
 
 public class GamePanel extends JPanel implements Runnable
 {
 	
 	GameStateManager gameStateManager;
+	EntityManager entityManager;
+	
 	Thread gameLoop;
 	
 	private static int P_WIDTH = 800;
@@ -24,6 +28,12 @@ public class GamePanel extends JPanel implements Runnable
 	public GamePanel()
 	{
 		gameStateManager = new GameStateManager();
+		
+		setBackground(Color.white);
+	    setPreferredSize( new Dimension(P_WIDTH, P_HEIGHT));
+
+	    setFocusable(true);
+	    requestFocusInWindow(); 
 	}
 
 	public void run()
