@@ -8,7 +8,6 @@ public class GamePanel extends JPanel implements Runnable
 {
 	
 	GameStateManager gameStateManager;
-	EntityManager entityManager;
 	
 	Thread gameLoop;
 	
