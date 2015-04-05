@@ -1,35 +1,28 @@
 package com.dehavenmedia.interstella;
 
-import java.awt.*;
 import java.awt.event.*;
-import java.awt.event.WindowEvent;
 
 import javax.swing.*;
 
+@SuppressWarnings("serial")
 public class GameFrame extends JFrame implements WindowListener
 {
 	
-	private static String TITLE = "Interstella - A Java Game Engine";
-	
+	private static String TITLE = "Interstella - A Java Game Engine";	
 	public static GamePanel gamePanel;
 	
 	public GameFrame()
 	{
+		//Initializing GameFrame's components
 		super(TITLE);
-		
 		gamePanel = new GamePanel();
+		setContentPane(gamePanel);
+		pack();	
 		
-		makeGUI();
-		initWindow();
-		
+		//Creating window
+		initWindow();		
 		setVisible(true);
 	} // End of BraveNewGalaxy() constructor.
-	
-	private void makeGUI()
-	{
-		setContentPane(gamePanel);
-		pack();
-	}
 	
 	private void initWindow()
 	{
