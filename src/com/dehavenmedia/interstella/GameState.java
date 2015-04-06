@@ -5,11 +5,15 @@ public enum GameState implements State
 	
 	ST_DEFAULT {	// Default game state -- it's logic moves it to the correct starting state.
 		
+		public void instate() {
+			
+		}
+		
 		public void update(double delta) {
 			//iterate through all updateable objects.
 		}
 		
-		public void draw() {
+		public void render() {
 			//iterate through all drawable objects
 		}
 	},		
