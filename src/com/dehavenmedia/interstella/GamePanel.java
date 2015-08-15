@@ -1,66 +1,82 @@
 package com.dehavenmedia.interstella;
 
 import java.awt.*;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseListener;
 
 import javax.swing.*;
 
 @SuppressWarnings("serial")
-public class GamePanel extends JPanel implements Runnable
+public class GamePanel extends JPanel implements Runnable, KeyListener, MouseListener
 {
-	//Initialize a GameStateManager in order to move smoothly from intro, to menu, to world.
-	GameStateManager gameStateManager;	
-	Thread gameLoop;
+	//Declare game constants
+	private static int MS_PER_FRAME;
+	private static int MS_PER_UPDATE;
+	private static int MAX_FRAME_SKIPS;
+	private static int P_WIDTH;
+	private static int P_HEIGHT;
 	
-	//Default game settings
-	private static int P_WIDTH = 800;
-	private static int P_HEIGHT = 600;
-	private static int DEFAULT_FPS = 80;
-	private static int MS_PER_FRAME = 1000/DEFAULT_FPS;
-	private static int MAX_FRAME_SKIPS = 5;
+	//Declare variable to hold a reference to current GameMode (Menu, Load, Play, etc).
+	GameStateManager gameStateManager;
 	
+	//Declare variable to hold a reference to main thread of the game.
+	Thread gameLoop;	
+	
+	//Initialize basic game states.
 	private volatile boolean isPaused = false; // Flag -- is the game currently paused?
 	private volatile boolean isRunning = false; // Flag -- is the game currently running?
 	
-	public GamePanel()
+	public GamePanel(int pWidth, int pHeight, int fps, int ups, int maxSkips)
 	{
-		gameStateManager = new GameStateManager(this);
+		//Initialize game constants from arguments provided by GameFrame.
+		MS_PER_FRAME = 1000/fps;
+		MS_PER_UPDATE = 1000/ups;
+		MAX_FRAME_SKIPS = maxSkips;		
+		P_WIDTH = pWidth;
+		P_HEIGHT = pHeight;
 		
-		setBackground(Color.white);
-	    setPreferredSize(new Dimension(P_WIDTH, P_HEIGHT));
-
-	    setFocusable(true);
-	    requestFocusInWindow(); 
+		//Initialize first game mode.
+		gameStateManager = new GameStateManager(this);
 	}
 
 	public void run()
 	{		
-		long previousTime;
-		long currentTime;
-		long elapsedTime;
-		double lag = 0.0;
 		isRunning = true;
 		
-		previousTime = getCurrTime(); //Sets the time the game loop starts
+		int numSkippedFrames = 0;
+		long currentTime;
+		long elapsedTime;
+		long accumulatedTime = 0;
+		long maximumFrameTime = MS_PER_FRAME * 1000000;
+		long maximumUpdateTime = MS_PER_UPDATE * 1000000;
+		long previousTime = getCurrTime(); //Sets the time the game loop starts
 		
 		while (isRunning)
 		{
 			currentTime = getCurrTime(); //Sets the time this particular game loop starts
+						
+			/* If the amount of time elapsed since the start of the last game loop is less than the target frames per second
+			 * or the maximum number of skipped frames have already been skipped, render the frame.	Otherwise, skip the frame. */
 			elapsedTime = currentTime - previousTime; //Measures the time that has elapsed since the beginning of the last game loop
-			previousTime = currentTime; //Saves the time this game loop started for the next game loop to evaluate
-			lag += elapsedTime/1000000; //Converts the elapsed time into milliseconds
-			
-			int numSkippedFrames = 0;
-			while (lag > MS_PER_FRAME && numSkippedFrames < MAX_FRAME_SKIPS) //If more time has elapsed since the last loop than desired...
+			if (elapsedTime <= maximumFrameTime || numSkippedFrames >= MAX_FRAME_SKIPS)
 			{
-				if(!isPaused) { gameStateManager.update(1); } //...update the game logic, if not paused,...
-				lag -= MS_PER_FRAME; //...as many frames as would have occurred during that time period.
-				numSkippedFrames++;
+				gameStateManager.render();
+				numSkippedFrames = 0; //Reset the skipped frames counter
+			} else { 
+				numSkippedFrames++; //Skip a frame render and increment the skipped frames counter
+			} 
+			
+			/* If the targeted amount of time since the last game update has elapsed, update the game.
+			 * Otherwise, wait until the next loop and check the accumulated time again. */
+			accumulatedTime += elapsedTime; //Measures the time that has elapsed since the beginning of the last game update
+			if (accumulatedTime >= maximumUpdateTime) 
+			{
+				gameStateManager.update(accumulatedTime/maximumUpdateTime); //Update the game, with the ratio of elapsed time to frame length as the delta.
+				gameStateManager.stateUpdate(); //Update the game state, if requested in the previous loop
+				accumulatedTime %= maximumUpdateTime; //Find the extra time accumulated (the modulo of accumulated time and maximum time)
 			}
 			
-			gameStateManager.update(lag/MS_PER_FRAME);
-			gameStateManager.render(); //Then render everything
-			gameStateManager.stateUpdate(); //Update the game state, if requested in the previous loop
-			lag = 0.0;
+			previousTime = currentTime; //Saves the time this game loop started for the next game loop to evaluate
 		}
 		
 		System.exit(0);
@@ -69,7 +85,12 @@ public class GamePanel extends JPanel implements Runnable
 	public void addNotify()
 	{
 		super.addNotify();
-		startGame();
+		
+		setBackground(Color.white);
+	    setPreferredSize(new Dimension(P_WIDTH, P_HEIGHT));
+
+	    setFocusable(true);
+	    requestFocusInWindow(); 
 	}
 	
 	private long getCurrTime()
@@ -83,8 +104,8 @@ public class GamePanel extends JPanel implements Runnable
 	{
 		if (gameLoop == null || !isRunning) {
 			gameLoop = new Thread(this);
-			gameLoop.start();
-		}
+		}		
+		gameLoop.start();
 	} // End of startGame().
 	
 	public void pauseGame()

@@ -4,18 +4,15 @@ public class GameStateManager {
 
 	private GameState gameState; // Tracks the game's state throughout execution.
 	private GameState nextState; // The next state the game should transition to at the beginning of the next loop.
-	private GamePanel mGameContext; // The context within which GameStateManager provides services.
 	
 	public GameStateManager(GamePanel gameContext)
 	{
-		mGameContext = gameContext;
 		gameState = GameState.ST_DEFAULT;
 		gameState.instate();
 	}
 	
 	public GameStateManager(GamePanel gameContext, GameState gs)
 	{
-		mGameContext = gameContext;
 		gameState = gs;
 		gameState.instate();
 	}

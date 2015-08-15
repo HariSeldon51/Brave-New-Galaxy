@@ -7,6 +7,12 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame implements WindowListener
 {
+	//Default game settings
+	private int pWidth = 800;
+	private int pHeight = 600;
+	private int dFPS = 60;
+	private int dUPS = 24;
+	private int maxSkips = 4;
 	
 	private static String TITLE = "Interstella - A Java Game Engine";	
 	public static GamePanel gamePanel;
@@ -15,7 +21,7 @@ public class GameFrame extends JFrame implements WindowListener
 	{
 		//Initializing GameFrame's components
 		super(TITLE);
-		gamePanel = new GamePanel();
+		gamePanel = new GamePanel(pWidth, pHeight, dFPS, dUPS, maxSkips);
 		setContentPane(gamePanel);
 		pack();	
 		
@@ -53,7 +59,10 @@ public class GameFrame extends JFrame implements WindowListener
 	}
 	
 	@Override
-	public void windowOpened(WindowEvent e) {	}
+	public void windowOpened(WindowEvent e) 
+	{
+		gamePanel.startGame();
+	}
 			
 	@Override
 	public void windowClosed(WindowEvent e) {	}
