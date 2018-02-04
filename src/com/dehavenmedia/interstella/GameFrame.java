@@ -10,11 +10,12 @@ public class GameFrame extends JFrame implements WindowListener
 	//Default game settings
 	private int pWidth = 800;
 	private int pHeight = 600;
-	private int dFPS = 60;
-	private int dUPS = 24;
+	private int dFPS = 60; // Frames per second
+	private int dUPS = 24; // Updates per second
 	private int maxSkips = 4;
-	
 	private static String TITLE = "Interstella - A Java Game Engine";	
+	
+	// Reference to game's rendering object
 	public static GamePanel gamePanel;
 	
 	public GameFrame()

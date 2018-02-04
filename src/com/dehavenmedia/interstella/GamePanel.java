@@ -1,7 +1,9 @@
 package com.dehavenmedia.interstella;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.*;
@@ -16,10 +18,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	private static int P_WIDTH;
 	private static int P_HEIGHT;
 	
-	//Declare variable to hold a reference to current GameMode (Menu, Load, Play, etc).
+	//Reference to current GameMode (Menu, Load, Play, etc).
 	GameStateManager gameStateManager;
 	
-	//Declare variable to hold a reference to main thread of the game.
+	//Reference to main thread of the game.
 	Thread gameLoop;	
 	
 	//Initialize basic game states.
@@ -122,5 +124,55 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	{
 		isRunning = false;
 	} // End of stopGame().
+	
+	// ------------  Game's input methods  ------------ //
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 
 } // End of Game class.
