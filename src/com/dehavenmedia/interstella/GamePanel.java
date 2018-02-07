@@ -17,6 +17,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	private static int MAX_FRAME_SKIPS;
 	private static int P_WIDTH;
 	private static int P_HEIGHT;
+	private static String P_MODE;
 	
 	//Reference to current GameMode (Menu, Load, Play, etc).
 	GameStateManager gameStateManager;
@@ -28,7 +29,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	private volatile boolean isPaused = false; // Flag -- is the game currently paused?
 	private volatile boolean isRunning = false; // Flag -- is the game currently running?
 	
-	public GamePanel(int pWidth, int pHeight, int fps, int ups, int maxSkips)
+	public GamePanel(int pWidth, int pHeight, int fps, int ups, int maxSkips, String mode)
 	{
 		//Initialize game constants from arguments provided by GameFrame.
 		MS_PER_FRAME = 1000/fps;
@@ -36,9 +37,10 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 		MAX_FRAME_SKIPS = maxSkips;		
 		P_WIDTH = pWidth;
 		P_HEIGHT = pHeight;
+		P_MODE = mode;
 		
 		//Initialize first game mode.
-		gameStateManager = new GameStateManager(this);
+		gameStateManager = new GameStateManager(this, P_MODE);
 	}
 
 	public void run()

@@ -13,6 +13,7 @@ public class GameFrame extends JFrame implements WindowListener
 	private int dFPS = 60; // Frames per second
 	private int dUPS = 24; // Updates per second
 	private int maxSkips = 4;
+	private static String MODE = "test"; // Can be prod, dev, or test
 	private static String TITLE = "Interstella - A Java Game Engine";	
 	
 	// Reference to game's rendering object
@@ -22,7 +23,7 @@ public class GameFrame extends JFrame implements WindowListener
 	{
 		//Initializing GameFrame's components
 		super(TITLE);
-		gamePanel = new GamePanel(pWidth, pHeight, dFPS, dUPS, maxSkips);
+		gamePanel = new GamePanel(pWidth, pHeight, dFPS, dUPS, maxSkips, MODE);
 		setContentPane(gamePanel);
 		pack();	
 		

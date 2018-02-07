@@ -4,9 +4,11 @@ public class GameStateManager {
 
 	private GameState gameState; // Tracks the game's state throughout execution.
 	private GameState nextState; // The next state the game should transition to at the beginning of the next loop.
+	private static String MODE;
 	
-	public GameStateManager(GamePanel gameContext)
+	public GameStateManager(GamePanel gameContext, String gameMode)
 	{
+		MODE = gameMode;
 		gameState = GameState.ST_DEFAULT;
 		gameState.instate();
 	}
