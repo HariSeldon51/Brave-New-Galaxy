@@ -9,14 +9,14 @@ public class GameStateManager {
 	public GameStateManager(GamePanel gameContext, String gameMode)
 	{
 		MODE = gameMode;
-		gameState = GameState.ST_DEFAULT;
-		gameState.instate();
-	}
-	
-	public GameStateManager(GamePanel gameContext, GameState gs)
-	{
-		gameState = gs;
-		gameState.instate();
+		
+		if (MODE == "test") {
+			gameState = GameState.ST_TEST;
+		} else {
+			gameState = GameState.ST_START;
+		}
+		
+		gameState.instate(this, gameContext);
 	}
 	
 	public void changeState(GameState gs)
@@ -26,22 +26,17 @@ public class GameStateManager {
 	
 	//  ------------   Game's gameloop methods   ------------ //
 	
-	public void update(double delta)
+	public void update(GamePanel gameContext, double delta)
 	{
-		gameState.update(delta);
+		gameState.update(this, gameContext, delta);
 	}
 	
-	public void render()
-	{
-		gameState.render();
-	}
-	
-	public void stateUpdate()
+	public void stateUpdate(GamePanel gameContext)
 	{
 		if (nextState != null) {
-			gameState.dispose();
+			gameState.dispose(this, gameContext);
 			gameState = nextState;
-			gameState.instate();
+			gameState.instate(this, gameContext);
 			nextState = null;
 		}		
 	}

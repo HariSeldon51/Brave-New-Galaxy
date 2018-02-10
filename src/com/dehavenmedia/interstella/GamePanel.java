@@ -64,7 +64,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 			elapsedTime = currentTime - previousTime; //Measures the time that has elapsed since the beginning of the last game loop
 			if (elapsedTime <= maximumFrameTime || numSkippedFrames >= MAX_FRAME_SKIPS)
 			{
-				gameStateManager.render();
+				render();
 				numSkippedFrames = 0; //Reset the skipped frames counter
 			} else { 
 				numSkippedFrames++; //Skip a frame render and increment the skipped frames counter
@@ -75,8 +75,8 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 			accumulatedTime += elapsedTime; //Measures the time that has elapsed since the beginning of the last game update
 			if (accumulatedTime >= maximumUpdateTime) 
 			{
-				gameStateManager.update(accumulatedTime/maximumUpdateTime); //Update the game, with the ratio of elapsed time to frame length as the delta.
-				gameStateManager.stateUpdate(); //Update the game state, if requested in the previous loop
+				gameStateManager.update(this, accumulatedTime/maximumUpdateTime); //Update the game, with the ratio of elapsed time to frame length as the delta.
+				gameStateManager.stateUpdate(this); //Update the game state, if requested in the previous loop
 				accumulatedTime %= maximumUpdateTime; //Find the extra time accumulated (the modulo of accumulated time and maximum time)
 			}
 			
@@ -90,7 +90,7 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	{
 		super.addNotify();
 		
-		setBackground(Color.white);
+		setBackground(Color.black);
 	    setPreferredSize(new Dimension(P_WIDTH, P_HEIGHT));
 
 	    setFocusable(true);
@@ -100,6 +100,12 @@ public class GamePanel extends JPanel implements Runnable, KeyListener, MouseLis
 	private long getCurrTime()
 	{
 		return System.nanoTime();
+	}
+	
+	// ------------  Game's render method(s)  ------------ //
+	
+	private void render( ) {
+		
 	}
 	
 	// ------------  Game's life cycle methods  ------------ //
