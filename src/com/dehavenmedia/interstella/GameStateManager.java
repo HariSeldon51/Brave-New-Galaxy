@@ -6,7 +6,7 @@ public class GameStateManager {
 	private GameState nextState; // The next state the game should transition to at the beginning of the next loop.
 	private static String MODE;
 	
-	public GameStateManager(GamePanel gameContext, String gameMode)
+	public GameStateManager(Game game, String gameMode)
 	{
 		MODE = gameMode;
 		
@@ -16,7 +16,7 @@ public class GameStateManager {
 			gameState = GameState.ST_START;
 		}
 		
-		gameState.instate(this, gameContext);
+		gameState.instate(this, game);
 	}
 	
 	public void changeState(GameState gs)
@@ -26,17 +26,17 @@ public class GameStateManager {
 	
 	//  ------------   Game's gameloop methods   ------------ //
 	
-	public void update(GamePanel gameContext, double delta)
+	public void update(Game game, double delta)
 	{
-		gameState.update(this, gameContext, delta);
+		gameState.update(this, game, delta);
 	}
 	
-	public void stateUpdate(GamePanel gameContext)
+	public void stateUpdate(Game game)
 	{
 		if (nextState != null) {
-			gameState.dispose(this, gameContext);
+			gameState.dispose(this, game);
 			gameState = nextState;
-			gameState.instate(this, gameContext);
+			gameState.instate(this, game);
 			nextState = null;
 		}		
 	}

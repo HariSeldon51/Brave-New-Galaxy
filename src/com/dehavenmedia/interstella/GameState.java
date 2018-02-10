@@ -22,7 +22,7 @@ public enum GameState implements State
 		
 	ST_TEST {
 		
-		public void instate(GameStateManager gsm, GamePanel gameContext) {
+		public void instate(GameStateManager gsm, Game game) {
 			//instate necessary objects and systems
 		}
 		
