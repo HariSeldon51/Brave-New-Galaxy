@@ -26,13 +26,15 @@ public class GameStateManager {
 	
 	//  ------------   Game's gameloop methods   ------------ //
 	
+	public void input(Window window) {
+		
+	}
+	
 	public void update(Game game, double delta)
 	{
 		gameState.update(this, game, delta);
-	}
-	
-	public void stateUpdate(Game game)
-	{
+		
+		// Change the game state if the update method set a different nextState.
 		if (nextState != null) {
 			gameState.dispose(this, game);
 			gameState = nextState;
@@ -40,5 +42,8 @@ public class GameStateManager {
 			nextState = null;
 		}		
 	}
-
+	
+	public void render(Window window) {
+		
+	}
 }
