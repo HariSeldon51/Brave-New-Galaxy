@@ -37,11 +37,11 @@ public class Game implements Runnable {
 		G_TITLE = title;
 		VSYNC = vsync;
 		
-		// Instantiate game state manager (game logic).
-		gameStateManager = new GameStateManager(G_MODE);
-		
 		// Instantiate window manager (GLFW implementation).
 		window = new Window(G_TITLE, INIT_WIDTH, INIT_HEIGHT, VSYNC);
+		
+		// Instantiate game state manager (game logic).
+		gameStateManager = new GameStateManager(this, window, G_MODE);
 	}
 	
 	public Game(int fps, int ups, int skips, int width, int height, boolean vsync, String title) {
@@ -74,12 +74,12 @@ public class Game implements Runnable {
 		}	
 	}
 	
-	public void init() {		
+	public void init() throws Exception {		
 		// This method is a stub, intended to be overriden by the developer
 		// to handle initial game setup.
 	}
 	
-	private void gameLoop() {
+	private void gameLoop() throws Exception {
 		
 		// Initialize variables for game loop.
 		int numSkippedFrames = 0;
@@ -128,17 +128,17 @@ public class Game implements Runnable {
 	
 	private void input() {
 		
-		gameStateManager.input(window);
+		gameStateManager.input();
 	}
 	
-	private void update(double delta) {
+	private void update(double delta) throws Exception {
 		
-		gameStateManager.update(this, delta); //Update the game, with the ratio of elapsed time to frame length as the delta.
+		gameStateManager.update(delta); //Update the game, with the ratio of elapsed time to frame length as the delta.
 	}
 	
 	private void render() {
 		
-		gameStateManager.render(window);
+		gameStateManager.render();
 		window.update();
 	}
 	
@@ -168,6 +168,7 @@ public class Game implements Runnable {
 	public void stop() {
 		
 		isRunning = false;
+		gameStateManager.cleanup();
 		window.close();
 		
 	} // End of stop()

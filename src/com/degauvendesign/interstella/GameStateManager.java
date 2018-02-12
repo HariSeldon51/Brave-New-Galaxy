@@ -9,10 +9,14 @@ public class GameStateManager {
 	private GameState currentState; // The current state of the game.
 	private GameState nextState; // The next state the game should transition to at the beginning of the next loop.
 	private static String MODE;
+	private static Game GAME;
+	private static Window WINDOW;
 	
-	public GameStateManager(String gameMode) {
+	public GameStateManager(Game game, Window window, String gameMode) {
 		
+		GAME = game;
 		MODE = gameMode;
+		WINDOW = window;
 		gameStates = new HashMap<String, GameState>();
 	}
 	
@@ -28,10 +32,11 @@ public class GameStateManager {
 	}
 	
 	// Sets the current state to a new state, thereby changing the game state.
-	public void setState(String newState) {
+	public void setState(String newState) throws Exception {
 		
 		if (currentState == null) {
 			currentState = gameStates.get(newState);
+			currentState.instate(GAME);
 		} else {
 			nextState = gameStates.get(newState);
 		}
@@ -39,36 +44,40 @@ public class GameStateManager {
 	
 	//  ------------   Game's gameloop methods   ------------ //
 	
-	public void input(Window window) {
-		currentState.input(window);
+	public void input() {
+		currentState.input(WINDOW);
 	}
 	
-	public void update(Game game, double delta) {
+	public void update(double delta) throws Exception {
 			
 		// Change the game state if the previous loop set a different nextState.
 		if (nextState != null) {
 			
 			if (currentState != null) {
-				currentState.dispose(game);
+				currentState.dispose(GAME);
 			}
 			
 			currentState = nextState;
-			currentState.instate(game);
+			currentState.instate(GAME);
 			nextState = null;
 		}
 		
 		String msg = "The initial state has not been set. Use GameStateManager.setState(String state).";
 		
 		try {
-			currentState.update(game, delta);
+			currentState.update(GAME, delta);
 		} catch (Exception e) {
 			throw new NullPointerException(msg);
 		}
 		
 	}
 	
-	public void render(Window window) {
+	public void render() {
 		
-		currentState.render(window);
+		currentState.render(WINDOW);
+	}
+	
+	public void cleanup() {
+		currentState.dispose(GAME);
 	}
 }

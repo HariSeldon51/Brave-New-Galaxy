@@ -7,8 +7,6 @@ import com.degauvendesign.interstella.Window;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
 import static org.lwjgl.opengl.GL11.glViewport;
 
 public class TestState implements GameState {
@@ -16,23 +14,29 @@ public class TestState implements GameState {
 	private int direction = 0;
 	private float color = 0.5f;
 	private final Renderer renderer = new Renderer();
+	
+	public TestState() {
+
+	}
 
 	@Override
-	public void instate(Game game) {
-
+	public void instate(Game game) throws Exception {
 		renderer.init();	
 	}
 	
 	@Override
 	public void render(Window window) {
 		
-		if ( window.isResized() ) {
-            glViewport(0, 0, window.getWidth(), window.getHeight());
-            window.setResized(false);
-        }
-
+//		if ( window.isResized() ) {
+//            glViewport(0, 0, window.getWidth(), window.getHeight());
+//            window.setResized(false);
+//        }
+//
+//		window.setClearColor(color, color, color, 0.0f);
+//		renderer.clear();
+		
 		window.setClearColor(color, color, color, 0.0f);
-		renderer.clear();
+        renderer.render(window);
 	}
 	
 	@Override
@@ -61,7 +65,6 @@ public class TestState implements GameState {
 
 	@Override
 	public void dispose(Game game) {
-		// TODO Auto-generated method stub
-		
+		renderer.cleanup();		
 	}
 }

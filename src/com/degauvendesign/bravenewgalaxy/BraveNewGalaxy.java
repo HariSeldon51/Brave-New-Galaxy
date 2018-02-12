@@ -25,7 +25,7 @@ public class BraveNewGalaxy extends Game {
 	}
 	
 	@Override
-	public void init() {
+	public void init() throws Exception {
 		
 		stateManager = game.getGameStateManager();
 		stateManager.add("test", new TestState());
