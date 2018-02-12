@@ -1,28 +1,42 @@
 package com.dehavenmedia.interstella;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class GameStateManager {
 
-	private GameState gameState; // Tracks the game's state throughout execution.
+	private HashMap<String, GameState> gameStates; // Tracks the game's state throughout execution.
+	private GameState currentState; // The current state of the game.
 	private GameState nextState; // The next state the game should transition to at the beginning of the next loop.
 	private static String MODE;
 	
-	public GameStateManager(Game game, String gameMode)
-	{
+	public GameStateManager(String gameMode) {
+		
 		MODE = gameMode;
-		
-		if (MODE == "test") {
-			gameState = GameState.ST_TEST;
-		} else {
-			gameState = GameState.ST_START;
-		}
-		
-		gameState.instate(this, game);
+		gameStates = new HashMap<String, GameState>();
 	}
 	
-	public void changeState(GameState gs)
-	{
-		nextState = gs;
-	} // End of changeState().
+	public void add(Map<String, GameState> stateMap) {
+		
+		gameStates.putAll(stateMap);
+	}
+	
+	// Alternate to the previous method -- adds only one state
+	public void add(String string, GameState gameState) {
+		
+		gameStates.put(string, gameState);
+	}
+	
+	// Sets the current state to a new state, thereby changing the game state.
+	public void setState(String newState) {
+		
+		nextState = gameStates.get(newState);	
+	}
+	
+	public void remove(String state) {
+		
+		gameStates.remove(state);
+	}
 	
 	//  ------------   Game's gameloop methods   ------------ //
 	
@@ -30,17 +44,26 @@ public class GameStateManager {
 		
 	}
 	
-	public void update(Game game, double delta)
-	{
-		gameState.update(this, game, delta);
-		
-		// Change the game state if the update method set a different nextState.
+	public void update(Game game, double delta) {
+			
+		// Change the game state if the previous loop set a different nextState.
 		if (nextState != null) {
-			gameState.dispose(this, game);
-			gameState = nextState;
-			gameState.instate(this, game);
+			
+			if (currentState != null) {
+				currentState.dispose(this, game);
+			}
+			
+			currentState = nextState;
+			currentState.instate(this, game);
 			nextState = null;
-		}		
+		}
+		
+		try {
+			currentState.update(this, game, delta);
+		} catch (Exception e) {
+			throw new NullPointerException("The initial state has not been set. Use GameStateManager.setState(String state).");
+		}
+		
 	}
 	
 	public void render(Window window) {

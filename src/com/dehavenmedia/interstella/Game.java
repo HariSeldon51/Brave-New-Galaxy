@@ -38,7 +38,7 @@ public class Game implements Runnable {
 		VSYNC = vsync;
 		
 		// Instantiate game state manager (game logic).
-		gameStateManager = new GameStateManager(this, G_MODE);
+		gameStateManager = new GameStateManager(G_MODE);
 		
 		// Instantiate window manager (GLFW implementation).
 		window = new Window(G_TITLE, INIT_WIDTH, INIT_HEIGHT, VSYNC);
@@ -52,7 +52,7 @@ public class Game implements Runnable {
 	
 	public Game(int fps, int ups, int skips, int width, int height, boolean vsync) {
 		
-		this(fps, ups, skips, width, height, vsync,  "Interstella Game Engine", "dev");
+		this(fps, ups, skips, width, height, vsync,  "A Game Powered by Interstella Game Engine", "dev");
 	}
 	
 	// Start() is found in the Game Lifecycle Methods section
@@ -116,7 +116,7 @@ public class Game implements Runnable {
 				input();
 				
 				// Update game based on current state
-				gameStateManager.update(this, accumulatedTime/maximumUpdateTime); //Update the game, with the ratio of elapsed time to frame length as the delta.
+				update(accumulatedTime/maximumUpdateTime);
 				
 				//Find the extra time accumulated (the modulo of accumulated time and maximum time)
 				accumulatedTime %= maximumUpdateTime; 
@@ -132,15 +132,20 @@ public class Game implements Runnable {
 		stop(); // Handles cleanup before program closes.
 	}
 	
+	private void render() {
+		
+		gameStateManager.render(window);
+		window.update();
+	}
+	
 	private void input() {
 		
 		gameStateManager.input(window);
 	}
 	
-	private void render() {
+	private void update(double delta) {
 		
-		gameStateManager.render(window);
-		window.update();
+		gameStateManager.update(this, delta); //Update the game, with the ratio of elapsed time to frame length as the delta.
 	}
 	
 	// ------------  Game's life cycle methods  ------------ //
@@ -175,7 +180,11 @@ public class Game implements Runnable {
 	
 	// ------------  Game's utility methods  ------------ //
 	
-	 long getCurrTime() {
+	public GameStateManager getGameStateManager() {
+		return gameStateManager;
+	}
+	
+	long getCurrTime() {
 		
 		return System.nanoTime();
 	}
