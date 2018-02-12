@@ -1,4 +1,4 @@
-package com.dehavenmedia.interstella;
+package com.degauvendesign.interstella;
 
 
 // TODO: Remove this class once the various enums have been moved to their own classes.

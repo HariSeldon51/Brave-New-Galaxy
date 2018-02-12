@@ -1,4 +1,4 @@
-package com.dehavenmedia.interstella;
+package com.degauvendesign.interstella;
 
 public interface Updateable {
 	

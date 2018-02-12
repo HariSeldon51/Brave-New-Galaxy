@@ -1,7 +1,7 @@
-package bravenewgalaxy;
+package com.degauvendesign.bravenewgalaxy;
 
-import com.dehavenmedia.interstella.Game;
-import com.dehavenmedia.interstella.GameStateManager;
+import com.degauvendesign.interstella.Game;
+import com.degauvendesign.interstella.GameStateManager;
 
 public class BraveNewGalaxy extends Game {
 	
@@ -22,20 +22,22 @@ public class BraveNewGalaxy extends Game {
 		//   window title
 		super(75, 30, 5, 800, 600, true, "Brave New Galaxy", "test");
 		
-	} // End of BraveNewGalaxy() constructor.
+	}
+	
+	@Override
+	public void init() {
+		
+		stateManager = game.getGameStateManager();
+		stateManager.add("test", new TestState());
+		stateManager.setState("test");
+	}
 	
 	// ------------  Main method  ------------ //
 	
 	public static void main(String[] args) {
 		
-		// Instantiate game and initialize game components
-		game = new BraveNewGalaxy();
-		
-		stateManager = game.getGameStateManager();
-		stateManager.add("test", new TestState());
-		stateManager.setState("test");
-		
-		game.start();
-		
-	} // End of main().
+		// Instantiate and start game.
+		game = new BraveNewGalaxy();	
+		game.start();	
+	}
 }

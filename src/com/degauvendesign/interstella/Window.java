@@ -1,4 +1,4 @@
-package com.dehavenmedia.interstella;
+package com.degauvendesign.interstella;
 
 import static org.lwjgl.glfw.GLFW.*;
 import org.lwjgl.glfw.GLFWErrorCallback;

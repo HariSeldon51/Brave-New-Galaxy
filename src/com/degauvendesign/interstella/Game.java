@@ -1,4 +1,4 @@
-package com.dehavenmedia.interstella;
+package com.degauvendesign.interstella;
 
 public class Game implements Runnable {
 	
@@ -42,7 +42,6 @@ public class Game implements Runnable {
 		
 		// Instantiate window manager (GLFW implementation).
 		window = new Window(G_TITLE, INIT_WIDTH, INIT_HEIGHT, VSYNC);
-
 	}
 	
 	public Game(int fps, int ups, int skips, int width, int height, boolean vsync, String title) {
@@ -62,18 +61,22 @@ public class Game implements Runnable {
 		isRunning = true;
 		
 		try {
+			
+			// Initializes all LWJGL and GFLW settings and objects.
+			window.init();
+			
+			
 			init();
+			
 			gameLoop();
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-		
-	} // End of run().
+		}	
+	}
 	
-	private void init() {
-		
-		window.init();
-		
+	public void init() {		
+		// This method is a stub, intended to be overriden by the developer
+		// to handle initial game setup.
 	}
 	
 	private void gameLoop() {
@@ -81,46 +84,37 @@ public class Game implements Runnable {
 		// Initialize variables for game loop.
 		int numSkippedFrames = 0;
 		long currentTime;
+		long maximumFrameTime = MS_PER_FRAME;
+		long previousTime = getCurrTime(); //Sets the time the game loop starts
+		
 		long elapsedTime;
 		long accumulatedTime = 0;
-		long maximumFrameTime = MS_PER_FRAME * 1000000;
-		long maximumUpdateTime = MS_PER_UPDATE * 1000000;
-		long previousTime = getCurrTime(); //Sets the time the game loop starts
+		long maximumUpdateTime = MS_PER_UPDATE;
 
 		// Run the rendering loop until the user has attempted to close
 		// the window or has pressed the ESCAPE key.
 		while ( isRunning ) {
 			
 			currentTime = getCurrTime(); //Sets the time this particular game loop starts
-			
-			/* If the amount of time elapsed since the start of the last game loop is less than the target frames per second
-			 * or the maximum number of skipped frames have already been skipped, render the frame.	Otherwise, skip the frame. */
 			elapsedTime = currentTime - previousTime; //Measures the time that has elapsed since the beginning of the last game loop
-			if (elapsedTime <= maximumFrameTime || numSkippedFrames >= MAX_FRAME_SKIPS) {
-				
-				render();
-				
-				numSkippedFrames = 0; //Reset the skipped frames counter
-			} else {
-				
-				numSkippedFrames++; //Skip a frame render and increment the skipped frames counter
-			} 
+			accumulatedTime += elapsedTime;
 			
-			/* If the targeted amount of time since the last game update has elapsed, update the game.
-			 * Otherwise, wait until the next loop and check the accumulated time again. */
-			accumulatedTime += elapsedTime; //Measures the time that has elapsed since the beginning of the last game update
-			if (accumulatedTime >= maximumUpdateTime) 
-			{
-				
-				// Receive input
-				input();
-				
-				// Update game based on current state
-				update(accumulatedTime/maximumUpdateTime);
-				
-				//Find the extra time accumulated (the modulo of accumulated time and maximum time)
+			// Receive input
+			input();
+			
+			// Update game
+			if (accumulatedTime >= maximumUpdateTime) {
+				update(accumulatedTime/maximumUpdateTime); // Update game based on current state
 				accumulatedTime %= maximumUpdateTime; 
 			}
+			
+			// Render game
+			if (getCurrTime() - previousTime <= maximumFrameTime || numSkippedFrames >= MAX_FRAME_SKIPS) {
+				render();
+				numSkippedFrames = 0; //Reset the skipped frames counter
+			} else {
+				numSkippedFrames++; //Skip a frame render and increment the skipped frames counter
+			} 
 			
 			// If window received a close event, change isRunning to false.
 			isRunning = !window.windowShouldClose();
@@ -132,12 +126,6 @@ public class Game implements Runnable {
 		stop(); // Handles cleanup before program closes.
 	}
 	
-	private void render() {
-		
-		gameStateManager.render(window);
-		window.update();
-	}
-	
 	private void input() {
 		
 		gameStateManager.input(window);
@@ -146,6 +134,12 @@ public class Game implements Runnable {
 	private void update(double delta) {
 		
 		gameStateManager.update(this, delta); //Update the game, with the ratio of elapsed time to frame length as the delta.
+	}
+	
+	private void render() {
+		
+		gameStateManager.render(window);
+		window.update();
 	}
 	
 	// ------------  Game's life cycle methods  ------------ //
@@ -182,6 +176,10 @@ public class Game implements Runnable {
 	
 	public GameStateManager getGameStateManager() {
 		return gameStateManager;
+	}
+	
+	public Window getWindow() {
+		return window;
 	}
 	
 	long getCurrTime() {

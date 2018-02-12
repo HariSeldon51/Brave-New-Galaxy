@@ -1,4 +1,4 @@
-package com.dehavenmedia.interstella;
+package com.degauvendesign.interstella;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,18 +30,17 @@ public class GameStateManager {
 	// Sets the current state to a new state, thereby changing the game state.
 	public void setState(String newState) {
 		
-		nextState = gameStates.get(newState);	
-	}
-	
-	public void remove(String state) {
-		
-		gameStates.remove(state);
+		if (currentState == null) {
+			currentState = gameStates.get(newState);
+		} else {
+			nextState = gameStates.get(newState);
+		}
 	}
 	
 	//  ------------   Game's gameloop methods   ------------ //
 	
 	public void input(Window window) {
-		
+		currentState.input(window);
 	}
 	
 	public void update(Game game, double delta) {
@@ -50,23 +49,26 @@ public class GameStateManager {
 		if (nextState != null) {
 			
 			if (currentState != null) {
-				currentState.dispose(this, game);
+				currentState.dispose(game);
 			}
 			
 			currentState = nextState;
-			currentState.instate(this, game);
+			currentState.instate(game);
 			nextState = null;
 		}
 		
+		String msg = "The initial state has not been set. Use GameStateManager.setState(String state).";
+		
 		try {
-			currentState.update(this, game, delta);
+			currentState.update(game, delta);
 		} catch (Exception e) {
-			throw new NullPointerException("The initial state has not been set. Use GameStateManager.setState(String state).");
+			throw new NullPointerException(msg);
 		}
 		
 	}
 	
 	public void render(Window window) {
 		
+		currentState.render(window);
 	}
 }
