@@ -3,23 +3,38 @@ package com.degauvendesign.interstella;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
+import org.joml.Matrix4f;
 import com.degauvendesign.interstella.graph.*;
 
 public class Renderer {
 	
+	// TODO: Make it so the Field of View can be changed by the player as a setting.
+	private static final float FOV = (float) Math.toRadians(60.0f);
+	
+	// TODO: Will these near and far clip distances need to be settable too?
+	private static final float Z_NEAR = 0.01f;
+	private static final float Z_FAR = 1000.f;
+	
+	private Matrix4f projectionMatrix;
     private static ShaderProgram shaderProgram;
 	
-	// TODO: Not sure if this class is needed -- remove if not used.
 	public Renderer() {     
-		
+		// TODO: This is a stub for the constructor -- may not be needed, but leave here.
     }
     
-    public void init() throws Exception {
+    public void init(Window window) throws Exception {
     	
+    	// Create shader
         shaderProgram = new ShaderProgram();
         shaderProgram.createVertexShader(Utils.loadResource("resources/vertex.vs"));
         shaderProgram.createFragmentShader(Utils.loadResource("resources/fragment.fs"));
         shaderProgram.link();
+        
+        //Create projection matrix
+        // TODO: Allow aspect ratio to change if screen mode changes.
+        float aspectRatio = (float) window.getWidth() / window.getHeight();
+        projectionMatrix = new Matrix4f().perspective(FOV, aspectRatio, Z_NEAR, Z_FAR);
+        shaderProgram.createUniform("projectionMatrix");
     }
 
     public void clear() {   	
@@ -35,6 +50,7 @@ public class Renderer {
         }
 
         shaderProgram.bind();
+        shaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
         // Bind to the VAO
         glBindVertexArray(mesh.getVaoId());

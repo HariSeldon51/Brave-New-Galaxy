@@ -23,13 +23,13 @@ public class TestState implements GameState {
 	@Override
 	public void instate(Game game) throws Exception {
 		
-		renderer.init();
+		renderer.init(game.getWindow());
 		
 		float[] positions = new float[] {
-			-0.5f, 0.5f, 0.0f,
-			-0.5f, -0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f,
-			0.5f, 0.5f, 0.0f,
+			-0.5f, 0.5f, -1.05f,
+			-0.5f, -0.5f, -1.05f,
+			0.5f, -0.5f, -1.05f,
+			0.5f, 0.5f, -1.05f,
 		};
 		float[] colors = new float[] {
 			0.5f, 0.0f, 0.0f,
