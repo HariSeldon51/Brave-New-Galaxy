@@ -7,7 +7,6 @@ import com.degauvendesign.interstella.Window;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
-import static org.lwjgl.opengl.GL11.glViewport;
 
 public class TestState implements GameState {
 	
