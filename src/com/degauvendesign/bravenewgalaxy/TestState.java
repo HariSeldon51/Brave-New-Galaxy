@@ -4,6 +4,7 @@ import com.degauvendesign.interstella.Game;
 import com.degauvendesign.interstella.GameState;
 import com.degauvendesign.interstella.Renderer;
 import com.degauvendesign.interstella.Window;
+import com.degauvendesign.interstella.graph.Mesh;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
@@ -12,30 +13,41 @@ public class TestState implements GameState {
 	
 	private int direction = 0;
 	private float color = 0.5f;
-	private final Renderer renderer = new Renderer();
+	private final Renderer renderer;
+	private Mesh mesh;
 	
 	public TestState() {
-
+		renderer = new Renderer();
 	}
 
 	@Override
 	public void instate(Game game) throws Exception {
-		renderer.init();	
+		
+		renderer.init();
+		
+		float[] positions = new float[] {
+			-0.5f, 0.5f, 0.0f,
+			-0.5f, -0.5f, 0.0f,
+			0.5f, -0.5f, 0.0f,
+			0.5f, 0.5f, 0.0f,
+		};
+		float[] colors = new float[] {
+			0.5f, 0.0f, 0.0f,
+            0.0f, 0.5f, 0.0f,
+            0.0f, 0.0f, 0.5f,
+            0.0f, 0.5f, 0.5f,	
+		};
+		int[] indices = new int[] {
+			0, 1, 3, 3, 1, 2,
+		};
+		mesh = new Mesh(positions, colors, indices);
 	}
 	
 	@Override
 	public void render(Window window) {
 		
-//		if ( window.isResized() ) {
-//            glViewport(0, 0, window.getWidth(), window.getHeight());
-//            window.setResized(false);
-//        }
-//
-//		window.setClearColor(color, color, color, 0.0f);
-//		renderer.clear();
-		
 		window.setClearColor(color, color, color, 0.0f);
-        renderer.render(window);
+        renderer.render(window, mesh);
 	}
 	
 	@Override
@@ -64,6 +76,7 @@ public class TestState implements GameState {
 
 	@Override
 	public void dispose(Game game) {
-		renderer.cleanup();		
+		renderer.dispose();	
+		mesh.dispose();
 	}
 }
