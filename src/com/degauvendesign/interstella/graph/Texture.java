@@ -55,7 +55,8 @@ public class Texture {
 			IntBuffer comp = stack.mallocInt(1);
 			
 			// Load the texture.
-			textureBuffer = stbi_load(fileName, w, h, comp, 4);
+//			stbi_set_flip_vertically_on_load(true);
+			textureBuffer = stbi_load("res/" + fileName, w, h, comp, 4);
 			
 			if (textureBuffer == null) {
                 throw new RuntimeException("Failed to load a texture file!"

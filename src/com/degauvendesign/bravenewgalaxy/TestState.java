@@ -32,7 +32,7 @@ public class TestState implements GameState {
 		
 		renderer.init(game.getWindow());
 			
-		// Create the Mesh
+		// Create vertex coordinates for mesh
         float[] positions = new float[] {
             -0.5f, 0.5f, 0.5f, // V0
             -0.5f, -0.5f, 0.5f, // V1
@@ -63,8 +63,10 @@ public class TestState implements GameState {
             -0.5f, -0.5f, 0.5f, // V18: V1 repeated
             0.5f, -0.5f, 0.5f, // V19: V2 repeated
         };
-        float[] textCoords = new float[]{
-            0.0f, 0.0f,
+        
+        // Create texture coordinate for mesh
+        float[] textCoords = new float[] {
+    		0.0f, 0.0f,
             0.0f, 0.5f,
             0.5f, 0.5f,
             0.5f, 0.0f,
@@ -94,7 +96,9 @@ public class TestState implements GameState {
             0.5f, 0.5f,
             1.0f, 0.5f,
         };
-        int[] indices = new int[]{
+        
+        // Setup vertex indices for mesh
+        int[] indices = new int[] {
             // Front face
             0, 1, 3, 3, 1, 2,
             // Top Face
@@ -106,9 +110,10 @@ public class TestState implements GameState {
             // Bottom face
             16, 18, 19, 17, 16, 19,
             // Back face
-            4, 6, 7, 5, 4, 7,};
+            4, 6, 7, 5, 4, 7,
+        };
 		
-        Texture texture = Texture.loadTexture("src/com/degauvendesign/interstella/resources/grassblock.png");
+        Texture texture = Texture.loadTexture("grassblock.png");
 		Mesh mesh = new Mesh(positions, textCoords, indices, texture);
 		Entity entity = new Entity(mesh);
 		entity.setPosition(0,  0,  -2);
