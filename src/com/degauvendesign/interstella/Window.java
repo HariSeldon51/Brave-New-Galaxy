@@ -94,6 +94,11 @@ public class Window {
         glEnable(GL_DEPTH_TEST);
     }
     
+    public long getWindowHandle() {
+    	
+    	return windowHandle;
+    }
+    
     public void close() {
     	
     	// Free the window callbacks and destroy the window

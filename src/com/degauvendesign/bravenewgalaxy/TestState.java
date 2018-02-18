@@ -3,28 +3,33 @@ package com.degauvendesign.bravenewgalaxy;
 import com.degauvendesign.interstella.Entity;
 import com.degauvendesign.interstella.Game;
 import com.degauvendesign.interstella.GameState;
+import com.degauvendesign.interstella.MouseInput;
 import com.degauvendesign.interstella.Renderer;
 import com.degauvendesign.interstella.Window;
+import com.degauvendesign.interstella.graph.Camera;
 import com.degauvendesign.interstella.graph.Mesh;
 import com.degauvendesign.interstella.graph.Texture;
 
 import static org.lwjgl.glfw.GLFW.*;
 
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 public class TestState implements GameState {
 	
-	private int displxInc = 0;
-	private int displyInc = 0;
-	private int displzInc = 0;	
-	private int scaleInc = 0;
+	private static final float MOUSE_SENSITIVITY = 0.2f;
+	private static final float CAMERA_POS_STEP = 0.05f;
 	
+	private final Vector3f cameraInc;
 	private final Renderer renderer;
+	private final Camera camera;
 	
 	private Entity[] entities;
 	
 	public TestState() {
 		renderer = new Renderer();
+		camera = new Camera();
+		cameraInc = new Vector3f(0, 0, 0);
 	}
 
 	@Override
@@ -115,67 +120,64 @@ public class TestState implements GameState {
 		
         Texture texture = Texture.loadTexture("grassblock.png");
 		Mesh mesh = new Mesh(positions, textCoords, indices, texture);
-		Entity entity = new Entity(mesh);
-		entity.setPosition(0,  0,  -2);
-		entities = new Entity[] { entity };
+		
+		Entity entity1 = new Entity(mesh);
+		entity1.setScale(0.5f);
+		entity1.setPosition(0, 0, -2);
+		
+		Entity entity2 = new Entity(mesh);
+		entity2.setScale(0.5f);
+		entity2.setPosition(0.5f, 0.5f, -2);
+		
+		Entity entity3 = new Entity(mesh);
+		entity3.setScale(0.5f);
+		entity3.setPosition(0, 0, -2.5f);
+		
+		Entity entity4 = new Entity(mesh);
+		entity4.setScale(0.5f);
+		entity4.setPosition(0.5f, 0, -2.5f);
+			
+		entities = new Entity[] { entity1, entity2, entity3, entity4 };
 	}
 	
 	@Override
-	public void input(Window window) {
+	public void input(Window window, MouseInput mouseInput) {
 
-		displyInc = 0;
-		displxInc = 0;
-		displzInc = 0;
-		scaleInc = 0;
-		
-		if (window.isKeyPressed(GLFW_KEY_UP)) {
-			displyInc = 1;
-		} else if (window.isKeyPressed(GLFW_KEY_DOWN)) {
-			displyInc = -1;
-		} else if (window.isKeyPressed(GLFW_KEY_LEFT)) {
-			displxInc = -1;
-		} else if (window.isKeyPressed(GLFW_KEY_RIGHT)) {
-			displxInc = 1;
-		} else if (window.isKeyPressed(GLFW_KEY_A)) {
-			displzInc = -1;
-		} else if (window.isKeyPressed(GLFW_KEY_Q)) {
-			displzInc = 1;
-		} else if (window.isKeyPressed(GLFW_KEY_Z)) {
-			scaleInc = -1;
-		} else if (window.isKeyPressed(GLFW_KEY_X)) {
-			scaleInc = 1;
-		}
+		cameraInc.set(0, 0, 0);
+        if (window.isKeyPressed(GLFW_KEY_W)) {
+            cameraInc.z = -1;
+        } else if (window.isKeyPressed(GLFW_KEY_S)) {
+            cameraInc.z = 1;
+        }
+        if (window.isKeyPressed(GLFW_KEY_A)) {
+            cameraInc.x = -1;
+        } else if (window.isKeyPressed(GLFW_KEY_D)) {
+            cameraInc.x = 1;
+        }
+        if (window.isKeyPressed(GLFW_KEY_Z)) {
+            cameraInc.y = -1;
+        } else if (window.isKeyPressed(GLFW_KEY_X)) {
+            cameraInc.y = 1;
+        }
 	}
 
 	@Override
-	public void update(Game game, double delta) {
+	public void update(Game game, double delta, MouseInput mouseInput) {
 
-		for (Entity entity : entities) {
-			
-			//Update entity position
-			Vector3f itemPos = entity.getPosition();
-			float posX = itemPos.x + displxInc * 0.001f;
-			float posY = itemPos.y + displyInc * 0.001f;
-			float posZ = itemPos.z + displzInc * 0.001f;
-			entity.setPosition(posX, posY, posZ);
-			
-			// Update entity scale
-			float scale = entity.getScale();
-			scale += scaleInc * 0.001f;
-			if (scale < 0) scale = 0;
-			entity.setScale(scale);
-			
-			// Update entity rotation angle so as to continuously rotate.
-			float rotation = entity.getRotation().y + 0.3f;
-			if ( rotation >= 360 ) rotation = 0;
-			entity.setRotation(rotation, rotation, rotation);
-		}
+		// Update camera position
+        camera.movePosition(cameraInc.x * CAMERA_POS_STEP, cameraInc.y * CAMERA_POS_STEP, cameraInc.z * CAMERA_POS_STEP);
+
+        // Update camera based on mouse            
+        if (mouseInput.isRightButtonPressed()) {
+            Vector2f rotVec = mouseInput.getDisplVec();
+            camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
+        }
 	}
 	
 	@Override
 	public void render(Window window) {
 		
-        renderer.render(window, entities);
+        renderer.render(window, camera, entities);
 	}
 
 	@Override

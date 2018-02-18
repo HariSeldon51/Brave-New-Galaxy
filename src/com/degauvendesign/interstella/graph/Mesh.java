@@ -32,7 +32,7 @@ public class Mesh {
 			// Initialize resources
 			this.texture = texture;
 			vertexCount = indices.length;
-			vboIdList = new ArrayList();
+			vboIdList = new ArrayList<Integer>();
 			
 			// Create the VAO and bind to it.
 	        vaoId = glGenVertexArrays();

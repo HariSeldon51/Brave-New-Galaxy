@@ -1,5 +1,7 @@
 package com.degauvendesign.interstella;
 
+import java.util.Map;
+
 public class Game implements Runnable {
 	
 	//Declare game constants
@@ -12,16 +14,19 @@ public class Game implements Runnable {
 	private static String G_TITLE;
 	private static boolean VSYNC;
 	
-	//Reference to window object
+	// Reference to window object
 	private Window window;
 	
-	//Reference to main thread of the game.
+	// Reference to main thread of the game.
 	private Thread gameLoop;
 	
-	//Reference to current GameState (Menu, Load, Play, etc).
+	// Reference to current GameState (Menu, Load, Play, etc).
 	private GameStateManager gameStateManager;
 	
-	//Initialize basic game states.
+	// Reference to mouse input listener
+	private final MouseInput mouseInput;
+	
+	// Initialize basic game states.
 	private volatile boolean isPaused = false; // Flag -- is the game currently paused?
 	private volatile boolean isRunning = false; // Flag -- is the game currently running?
 
@@ -42,6 +47,9 @@ public class Game implements Runnable {
 		
 		// Instantiate game state manager (game logic).
 		gameStateManager = new GameStateManager(this, window, G_MODE);
+	
+		// Instantiate mouse input listener.
+		mouseInput = new MouseInput();
 	}
 	
 	public Game(int fps, int ups, int skips, int width, int height, boolean vsync, String title) {
@@ -64,8 +72,7 @@ public class Game implements Runnable {
 			
 			// Initializes all LWJGL and GFLW settings and objects.
 			window.init();
-			
-			
+			mouseInput.init(window);
 			init();
 			
 			gameLoop();
@@ -128,12 +135,13 @@ public class Game implements Runnable {
 	
 	private void input() {
 		
-		gameStateManager.input();
+		mouseInput.input(window);
+		gameStateManager.input(mouseInput);
 	}
 	
 	private void update(double delta) throws Exception {
 		
-		gameStateManager.update(delta); //Update the game, with the ratio of elapsed time to frame length as the delta.
+		gameStateManager.update(delta, mouseInput); //Update the game, with the ratio of elapsed time to frame length as the delta.
 	}
 	
 	private void render() {
@@ -177,6 +185,18 @@ public class Game implements Runnable {
 	
 	public GameStateManager getGameStateManager() {
 		return gameStateManager;
+	}
+	
+	public void addState(String stateName, GameState gameState ) {
+		gameStateManager.add(stateName, gameState);
+	}
+	
+	public void addState(Map<String, GameState> gameState ) {
+		gameStateManager.add(gameState);
+	}
+	
+	public void setState(String stateName) throws Exception {
+		gameStateManager.setState(stateName);
 	}
 	
 	public Window getWindow() {

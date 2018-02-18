@@ -7,7 +7,6 @@ public class BraveNewGalaxy extends Game {
 	
 	// References to game and game components
 	private static Game game;
-	private static GameStateManager stateManager;
 	
 	public BraveNewGalaxy() {
 		
@@ -20,6 +19,7 @@ public class BraveNewGalaxy extends Game {
 		//   use vsync,
 		//   game mode,
 		//   window title
+		// TODO: Make these params configurable settings
 		super(75, 30, 5, 800, 600, true, "Brave New Galaxy", "test");
 		
 	}
@@ -27,9 +27,8 @@ public class BraveNewGalaxy extends Game {
 	@Override
 	public void init() throws Exception {
 		
-		stateManager = game.getGameStateManager();
-		stateManager.add("test", new TestState());
-		stateManager.setState("test");
+		game.addState("test", new TestState());
+		game.setState("test");
 	}
 	
 	// ------------  Main method  ------------ //

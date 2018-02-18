@@ -44,11 +44,11 @@ public class GameStateManager {
 	
 	//  ------------   Game's gameloop methods   ------------ //
 	
-	public void input() {
-		currentState.input(WINDOW);
+	public void input(MouseInput mouseInput) {
+		currentState.input(WINDOW, mouseInput);
 	}
 	
-	public void update(double delta) throws Exception {
+	public void update(double delta, MouseInput mouseInput) throws Exception {
 			
 		// Change the game state if the previous loop set a different nextState.
 		if (nextState != null) {
@@ -65,7 +65,7 @@ public class GameStateManager {
 		String msg = "The initial state has not been set. Use GameStateManager.setState(String state).";
 		
 		try {
-			currentState.update(GAME, delta);
+			currentState.update(GAME, delta, mouseInput);
 		} catch (Exception e) {
 			throw new NullPointerException(msg);
 		}

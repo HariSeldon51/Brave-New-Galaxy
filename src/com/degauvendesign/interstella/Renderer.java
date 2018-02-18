@@ -1,8 +1,6 @@
 package com.degauvendesign.interstella;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.*;
 import org.joml.Matrix4f;
 import com.degauvendesign.interstella.graph.*;
 
@@ -35,7 +33,7 @@ public class Renderer {
         //Create projection and world matrices
         // TODO: Allow aspect ratio to change if screen mode changes.
         shaderProgram.createUniform("projectionMatrix");
-        shaderProgram.createUniform("worldMatrix");
+        shaderProgram.createUniform("modelViewMatrix");
         shaderProgram.createUniform("texture_sampler");
         
         window.setClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -45,7 +43,7 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
     
-    public void render(Window window, Entity[] entities) {
+    public void render(Window window, Camera camera, Entity[] entities) {
         clear();
 
         if (window.isResized()) {
@@ -59,22 +57,21 @@ public class Renderer {
         projectionMatrix = transform.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
         shaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
+        // Update view Matrix
+        Matrix4f viewMatrix = transform.getViewMatrix(camera);
+        
         // Update texture to use
         shaderProgram.setUniform("texture_sampler", 0);
         
         // Render each entity
         for (Entity entity : entities) {
         	
-        	// Set the worldMatrix for this entity
-        	Matrix4f worldMatrix = transform.getWorldMatrix(
-    			entity.getPosition(),
-    			entity.getRotation(),
-    			entity.getScale());
-        	shaderProgram.setUniform("worldMatrix", worldMatrix);
+        	// Set the model/view matrix for this entity
+        	Matrix4f modelViewMatrix = transform.getModelViewMatrix(entity, viewMatrix);
+        	shaderProgram.setUniform("modelViewMatrix", modelViewMatrix); 	
         	
         	// Render the entity
-        	entity.getMesh().render();
-        	
+        	entity.getMesh().render();    	
         }
 
         shaderProgram.unbind();

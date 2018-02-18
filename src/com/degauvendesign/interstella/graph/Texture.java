@@ -42,6 +42,14 @@ public class Texture {
 		return id;
 	}
 	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+	
 	public static Texture loadTexture(String fileName) throws Exception {
 		
 		ByteBuffer textureBuffer;

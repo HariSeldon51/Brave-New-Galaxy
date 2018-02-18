@@ -6,9 +6,9 @@ public interface GameState {
 	
 	public void render(Window window);
 	
-	public void input(Window window);
+	public void input(Window window, MouseInput mouseInput);
 
-	public void update(Game game, double delta);
+	public void update(Game game, double delta, MouseInput mouseInput);
 	
 	public void dispose(Game game);
 }
