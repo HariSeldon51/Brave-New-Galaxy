@@ -18,6 +18,7 @@ public class Window {
     private long windowHandle;
     private boolean resized;
     private boolean vSync;
+    private boolean cursorVisible;
 
     public Window(String title, int width, int height, boolean vSync) {
         this.title = title;
@@ -25,6 +26,7 @@ public class Window {
         this.height = height;
         this.vSync = vSync;
         this.resized = false;
+        cursorVisible = true;
     }
     
     public void init() {
@@ -113,6 +115,23 @@ public class Window {
     public void setClearColor(float r, float g, float b, float alpha) {
     	
         glClearColor(r, g, b, alpha);
+    }
+    
+    public void hideCursor() {
+    	
+    	glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    	cursorVisible = false;
+    }
+    
+    public void showCursor() {
+    	
+    	glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    	cursorVisible = true;
+    }
+    
+    public boolean cursorVisible() {
+    	
+    	return cursorVisible;
     }
 
     public boolean isKeyPressed(int keyCode) {

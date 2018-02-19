@@ -35,7 +35,9 @@ public class TestState implements GameState {
 	@Override
 	public void instate(Game game) throws Exception {
 		
-		renderer.init(game.getWindow());
+		Window window = game.getWindow();
+		renderer.init(window);
+		window.hideCursor();
 			
 		// Create vertex coordinates for mesh
         float[] positions = new float[] {
@@ -144,34 +146,47 @@ public class TestState implements GameState {
 	public void input(Window window, MouseInput mouseInput) {
 
 		cameraInc.set(0, 0, 0);
+		
         if (window.isKeyPressed(GLFW_KEY_W)) {
             cameraInc.z = -1;
         } else if (window.isKeyPressed(GLFW_KEY_S)) {
             cameraInc.z = 1;
         }
+        
         if (window.isKeyPressed(GLFW_KEY_A)) {
             cameraInc.x = -1;
         } else if (window.isKeyPressed(GLFW_KEY_D)) {
             cameraInc.x = 1;
         }
+        
         if (window.isKeyPressed(GLFW_KEY_Z)) {
             cameraInc.y = -1;
         } else if (window.isKeyPressed(GLFW_KEY_X)) {
             cameraInc.y = 1;
         }
+        
+        if (window.isKeyPressed(GLFW_KEY_Q)) {
+            
+        	if (window.cursorVisible()) {
+        		window.hideCursor();
+        	} else {
+        		window.showCursor();
+        	}
+        }
+        
 	}
 
 	@Override
-	public void update(Game game, double delta, MouseInput mouseInput) {
+	public void update(Game game, float delta, MouseInput mouseInput) {
 
 		// Update camera position
-        camera.movePosition(cameraInc.x * CAMERA_POS_STEP, cameraInc.y * CAMERA_POS_STEP, cameraInc.z * CAMERA_POS_STEP);
+        camera.movePosition(cameraInc.x * delta * CAMERA_POS_STEP,
+        					cameraInc.y * delta * CAMERA_POS_STEP,
+        					cameraInc.z * delta * CAMERA_POS_STEP);
 
         // Update camera based on mouse            
-        if (mouseInput.isRightButtonPressed()) {
-            Vector2f rotVec = mouseInput.getDisplVec();
-            camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
-        }
+        Vector2f rotVec = mouseInput.getDisplVec();
+        camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
 	}
 	
 	@Override

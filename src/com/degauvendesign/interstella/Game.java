@@ -90,13 +90,13 @@ public class Game implements Runnable {
 		
 		// Initialize variables for game loop.
 		int numSkippedFrames = 0;
-		long currentTime;
-		long maximumFrameTime = MS_PER_FRAME;
-		long previousTime = getCurrTime(); //Sets the time the game loop starts
+		float currentTime;
+		float maximumFrameTime = MS_PER_FRAME;
+		float previousTime = getCurrTime(); //Sets the time the game loop starts
 		
-		long elapsedTime;
-		long accumulatedTime = 0;
-		long maximumUpdateTime = MS_PER_UPDATE;
+		float elapsedTime;
+		float accumulatedTime = 0;
+		float maximumUpdateTime = MS_PER_UPDATE;
 
 		// Run the rendering loop until the user has attempted to close
 		// the window or has pressed the ESCAPE key.
@@ -104,14 +104,14 @@ public class Game implements Runnable {
 			
 			currentTime = getCurrTime(); //Sets the time this particular game loop starts
 			elapsedTime = currentTime - previousTime; //Measures the time that has elapsed since the beginning of the last game loop
-			accumulatedTime += elapsedTime;
+			accumulatedTime += elapsedTime; // Add elapsed time to the time left over from the last loop.
 			
 			// Receive input
 			input();
 			
 			// Update game
 			if (accumulatedTime >= maximumUpdateTime) {
-				update(accumulatedTime/maximumUpdateTime); // Update game based on current state
+				update((accumulatedTime/maximumUpdateTime) / 1000000); // Update game based on current state, time adjusted for speed and elapsed time.
 				accumulatedTime %= maximumUpdateTime; 
 			}
 			
@@ -139,7 +139,7 @@ public class Game implements Runnable {
 		gameStateManager.input(mouseInput);
 	}
 	
-	private void update(double delta) throws Exception {
+	private void update(float delta) throws Exception {
 		
 		gameStateManager.update(delta, mouseInput); //Update the game, with the ratio of elapsed time to frame length as the delta.
 	}

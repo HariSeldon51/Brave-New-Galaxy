@@ -8,7 +8,7 @@ public interface GameState {
 	
 	public void input(Window window, MouseInput mouseInput);
 
-	public void update(Game game, double delta, MouseInput mouseInput);
+	public void update(Game game, float delta, MouseInput mouseInput);
 	
 	public void dispose(Game game);
 }

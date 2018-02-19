@@ -48,7 +48,7 @@ public class GameStateManager {
 		currentState.input(WINDOW, mouseInput);
 	}
 	
-	public void update(double delta, MouseInput mouseInput) throws Exception {
+	public void update(float delta, MouseInput mouseInput) throws Exception {
 			
 		// Change the game state if the previous loop set a different nextState.
 		if (nextState != null) {

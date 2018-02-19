@@ -35,7 +35,7 @@ public class Transform {
 		viewMatrix.rotation((float)Math.toRadians(rotation.x), new Vector3f(1, 0, 0))
 				  .rotate((float)Math.toRadians(rotation.y), new Vector3f(0, 1, 0));
 		
-		// Than, translate camera
+		// Then, translate camera
 		viewMatrix.translate(-cameraPos.x, -cameraPos.y, -cameraPos.z);
 				
 		return viewMatrix;
