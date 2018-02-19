@@ -163,17 +163,7 @@ public class TestState implements GameState {
             cameraInc.y = -1;
         } else if (window.isKeyPressed(GLFW_KEY_X)) {
             cameraInc.y = 1;
-        }
-        
-        if (window.isKeyPressed(GLFW_KEY_Q)) {
-            
-        	if (window.cursorVisible()) {
-        		window.hideCursor();
-        	} else {
-        		window.showCursor();
-        	}
-        }
-        
+        }        
 	}
 
 	@Override
